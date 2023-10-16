@@ -1,0 +1,21 @@
+﻿<MudAppBar Elevation="1">
+    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+    <MudSpacer />
+    <h2>Endava Tech Course Bank App</h2>
+    <MudSpacer />
+    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/ddimma/EndavaTechCourse.BankApp" Target="_blank" />
+</MudAppBar>
+<MudDrawer @bind-Open="@open" Elevation="1">
+    <MudDrawerHeader>
+        <MudText Typo="Typo.h6">My App</MudText>
+    </MudDrawerHeader>
+    <MudNavMenu>
+        <MudNavLink Href="/counter">Counter</MudNavLink>
+        <MudNavLink Href="/datagrid">Data Grid</MudNavLink>
+        <MudNavLink Href="/dropzone">Drop Zone</MudNavLink>
+        <MudNavLink Href="/fetchdata">Fetch Data</MudNavLink>
+        <MudNavLink Href="/">Home</MudNavLink>
+        <MudNavLink Href="/Tabs">Tabs</MudNavLink>
+        <MudNavLink Href="/about">About</MudNavLink>
+    </MudNavMenu>
+</MudDrawer>

@@ -1,15 +1,12 @@
 ﻿@inherits LayoutComponentBase
+@using EndavaTechCourse.BankApp.Client.Pages 
 
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="0" Color="Color.Primary">
-        <h2>Endava Tech Course Bank App | </h2>
-        <MudButton Href="/" Variant="Variant.Text" Style=@($"color:{Theme.PaletteDark.White}") Class="ml-4">Pagina Principala</MudButton>
-    </MudAppBar>
-
+    <NavBar/>
     <MudMainContent>
         <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-8">
             @Body
