@@ -1,0 +1,29 @@
+﻿@inherits LayoutComponentBase
+@using EndavaTechCourse.BankApp.Client.Pages 
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <NavBar/>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-8">
+            @Body
+            <MudScrollToTop>
+                <MudFab Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.ArrowCircleUp" />
+            </MudScrollToTop>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+
+@code {
+    private MudTheme Theme = new MudTheme()
+    {
+        Palette = new PaletteLight()
+        {
+            Tertiary = Colors.DeepPurple.Darken4
+        },
+    };
+}
