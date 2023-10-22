@@ -1,11 +1,14 @@
-﻿using System;
+﻿using EndavaTechCourse.BankApp.Domain.Common;
+
 namespace EndavaTechCourse.BankApp.Domain.Models
 {
-	public class Transaction
+	public class Transaction : BaseEntity
 	{
-		public Transaction()
-		{
-		}
-	}
+		public string Type { get; set; }
+		public decimal Amount { get; set; }
+		public Guid SenderId { get; set; } // ??
+		public Guid ReceiverId { get; set; } // ??
+        public Currency TransactionCurrency { get; set; } // ??
+    }
 }
 

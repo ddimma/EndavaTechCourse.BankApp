@@ -1,5 +1,4 @@
-﻿using System;
-using EndavaTechCourse.BankApp.Domain.Common;
+﻿using EndavaTechCourse.BankApp.Domain.Common;
 namespace EndavaTechCourse.BankApp.Domain.Models
 {
 	public class Currency : BaseEntity
