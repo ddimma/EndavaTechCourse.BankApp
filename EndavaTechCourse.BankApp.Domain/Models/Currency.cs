@@ -1,11 +1,12 @@
 ﻿using System;
+using EndavaTechCourse.BankApp.Domain.Common;
 namespace EndavaTechCourse.BankApp.Domain.Models
 {
-	public class Currency
+	public class Currency : BaseEntity
 	{
-		public Currency()
-		{
-		}
+		public decimal ChangeRate { get; set; }
+		public string Name { get; set; }
+		public string CurrencyCode { get; set; }
 	}
 }
 
