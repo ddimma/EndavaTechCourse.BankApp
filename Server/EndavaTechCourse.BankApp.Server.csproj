@@ -8,12 +8,17 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Client\EndavaTechCourse.BankApp.Client.csproj" />
     <ProjectReference Include="..\Shared\EndavaTechCourse.BankApp.Shared.csproj" />
+    <ProjectReference Include="..\EndavaTechCourse.BankApp.Infrastructure\EndavaTechCourse.BankApp.Infrastructure.csproj" />
   </ItemGroup>
 
 
