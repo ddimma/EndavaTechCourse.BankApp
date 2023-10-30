@@ -1,0 +1,31 @@
+﻿@page "/create"
+@using EndavaTechCourse.BankApp.Shared
+@inject NavigationManager NavigationManager
+@inject HttpClient HttpClient
+
+<PageTitle>Create your new Wallet</PageTitle>
+
+<MudForm Model="_createWalletDTO" OnValidSubmit="CreateWalletAsync">
+    <MudSelect T="string" @bind-Value="_createWalletDTO.Type" Label="Type" AnchorOrigin="Origin.BottomCenter">
+        <MudSelectItem Value="@("Debit")" />
+        <MudSelectItem Value="@("Credit")" />
+    </MudSelect>
+
+    <MudSelect T="string" @bind-Value="_createWalletDTO.CurrencyDTO.CurrencyCode" Label="CurrencyCode" AnchorOrigin="Origin.BottomCenter">
+        <MudSelectItem Value="@("EUR")" />
+        <MudSelectItem Value="@("USD")" />
+        <MudSelectItem Value="@("MDL")" />
+    </MudSelect>
+
+    <MudNumericField @bind-Value="_createWalletDTO.Amount" Label="Amount" Required="true" />
+    <MudButton Type="ButtonType.Submit">Create Wallet</MudButton>
+</MudForm>
+
+@code{
+    private CreateWalletDTO _createWalletDTO = new CreateWalletDTO();
+
+    private async Task CreateWalletAsync()
+    {
+        await HttpClient.PostAsJsonAsync("api/wallets/create", _createWalletDTO);
+    }
+}

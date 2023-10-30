@@ -1,0 +1,36 @@
+﻿@page "/wallets"
+@using EndavaTechCourse.BankApp.Shared
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+
+<h3>Wallets</h3>
+
+<MudTable Items="_wallets">
+    <HeaderContent>
+        <MudTh>Type</MudTh>
+        <MudTh>Amount</MudTh>
+        <MudTh>Currency</MudTh>
+        <MudTh>Created</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.Type</MudTd>
+        <MudTd>@context.Amount</MudTd>
+        <MudTd>@context.Currency</MudTd>
+        <MudTd>@context.CreateDate.ToString("yyyy-MM-dd")</MudTd>
+    </RowTemplate>
+</MudTable>
+
+<h2> </h2>
+
+<MudFab Href="wallets/create" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Add" Label="Create Wallet" Size="Size.Medium" />
+
+@code {
+    private List<GetWalletDTO> _wallets;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Fetch wallet data from the API
+        _wallets = await HttpClient.GetFromJsonAsync<List<GetWalletDTO>>("/api/wallets");
+    }
+}
