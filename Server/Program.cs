@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using EndavaTechCourse.BankApp.Infrastructure;
+using EndavaTechCourse.BankApp.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace EndavaTechCourse.BankApp;
 
@@ -12,10 +14,10 @@ public class Program
         var configuration = builder.Configuration;
 
         // Add services to the container.
-        var value = builder.Services.AddInfrastructure(configuration);
-
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
+
+        builder.Services.AddInfrastructure(configuration);
 
         var app = builder.Build();
 
