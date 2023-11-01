@@ -14,11 +14,12 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
         private readonly ApplicationDbContext _dbContext;
         public WalletsController(ApplicationDbContext dbContext)
         {
+            ArgumentNullException.ThrowIfNull(dbContext);
             _dbContext = dbContext;
         }
 
-        [HttpPost]
-        public IActionResult CreateWallet([FromBody] CreateWalletDTO createWalletDTO)
+        [HttpPost("create")]
+        public IActionResult CreateWallet([FromBody] WalletDto createWalletDTO)
         {
             var wallet = new Wallet
             {
@@ -26,11 +27,14 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
                 Amount = createWalletDTO.Amount,
                 Currency = new Currency
                 {
-                    Name = createWalletDTO.CurrencyDTO.Name,
-                    CurrencyCode = createWalletDTO.CurrencyDTO.CurrencyCode,
-                    ChangeRate = createWalletDTO.CurrencyDTO.ChangeRate
+                    CurrencyCode = createWalletDTO.Currency
                 }
             };
+
+            if (wallet == null)
+            {
+                return BadRequest();
+            }
 
             _dbContext.Wallets.Add(wallet);
             _dbContext.SaveChanges();
@@ -54,30 +58,25 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<GetWalletDTO> GetWallets()
+        public async Task<List<WalletDto>> GetWallets()
         {
-            var wallets = _dbContext.Wallets
-            .Include(w => w.Currency)
-            .ToList();
+            var wallets = await _dbContext.Wallets
+                .Include(x => x.Currency).ToListAsync();
 
-            var walletsList = new List<GetWalletDTO>();
+            var walletsList = new List<WalletDto>();
             foreach (var wallet in wallets)
             {
-                var newWallet = new GetWalletDTO
+                var newWallet = new WalletDto
                 {
                     Amount = wallet.Amount,
                     Type = wallet.Type,
-                    Id = wallet.Id,
+                    Id = wallet.Id.ToString(),
                     Currency = wallet.Currency.CurrencyCode,
-                    CreateDate = wallet.TimeStamp
                 };
                 walletsList.Add(newWallet);
             }
-
             return walletsList;
         }
-
-
     }
 }
 
