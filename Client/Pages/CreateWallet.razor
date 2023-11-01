@@ -1,31 +1,39 @@
-﻿@page "/create"
+﻿@page "/wallets/create"
 @using EndavaTechCourse.BankApp.Shared
 @inject NavigationManager NavigationManager
 @inject HttpClient HttpClient
 
 <PageTitle>Create your new Wallet</PageTitle>
 
-<MudForm Model="_createWalletDTO" OnValidSubmit="CreateWalletAsync">
-    <MudSelect T="string" @bind-Value="_createWalletDTO.Type" Label="Type" AnchorOrigin="Origin.BottomCenter">
+<MudForm Model="_createWallet" OnValidSubmit="CreateWalletAsync">
+    <MudSelect T="string" @bind-Value="_createWallet.Type" Label="Type" AnchorOrigin="Origin.BottomCenter">
         <MudSelectItem Value="@("Debit")" />
         <MudSelectItem Value="@("Credit")" />
     </MudSelect>
 
-    <MudSelect T="string" @bind-Value="_createWalletDTO.CurrencyDTO.CurrencyCode" Label="CurrencyCode" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect T="string" @bind-Value="_createWallet.Currency" Label="CurrencyCode" AnchorOrigin="Origin.BottomCenter">
         <MudSelectItem Value="@("EUR")" />
         <MudSelectItem Value="@("USD")" />
         <MudSelectItem Value="@("MDL")" />
     </MudSelect>
 
-    <MudNumericField @bind-Value="_createWalletDTO.Amount" Label="Amount" Required="true" />
-    <MudButton Type="ButtonType.Submit">Create Wallet</MudButton>
+    <MudNumericField @bind-Value="_createWallet.Amount" Label="Amount" Required="true" />
+    <MudButton Type="ButtonType.Submit" @onclick="CreateWalletAsync">Create Wallet</MudButton>
 </MudForm>
 
 @code{
-    private CreateWalletDTO _createWalletDTO = new CreateWalletDTO();
+    private WalletDto _createWallet = new WalletDto();
 
     private async Task CreateWalletAsync()
     {
-        await HttpClient.PostAsJsonAsync("api/wallets/create", _createWalletDTO);
+        try
+        {
+            await HttpClient.PostAsJsonAsync("api/wallets/create", _createWallet);
+            NavigationManager.NavigateTo("/wallets");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
     }
 }

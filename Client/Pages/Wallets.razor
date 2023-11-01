@@ -6,18 +6,18 @@
 
 <h3>Wallets</h3>
 
-<MudTable Items="_wallets">
+<MudTable Items="wallets">
     <HeaderContent>
         <MudTh>Type</MudTh>
         <MudTh>Amount</MudTh>
         <MudTh>Currency</MudTh>
-        <MudTh>Created</MudTh>
+        <MudTh>ID</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd>@context.Type</MudTd>
         <MudTd>@context.Amount</MudTd>
         <MudTd>@context.Currency</MudTd>
-        <MudTd>@context.CreateDate.ToString("yyyy-MM-dd")</MudTd>
+        <MudTd>@context.Id.ToString()</MudTd>
     </RowTemplate>
 </MudTable>
 
@@ -26,11 +26,10 @@
 <MudFab Href="wallets/create" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Add" Label="Create Wallet" Size="Size.Medium" />
 
 @code {
-    private List<GetWalletDTO> _wallets;
+    private List<WalletDto> wallets;
 
     protected override async Task OnInitializedAsync()
     {
-        // Fetch wallet data from the API
-        _wallets = await HttpClient.GetFromJsonAsync<List<GetWalletDTO>>("/api/wallets");
+        wallets = await HttpClient.GetFromJsonAsync<List<WalletDto>>("/api/wallets");
     }
 }
