@@ -13,12 +13,16 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="MediatR" Version="12.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Client\EndavaTechCourse.BankApp.Client.csproj" />
     <ProjectReference Include="..\Shared\EndavaTechCourse.BankApp.Shared.csproj" />
     <ProjectReference Include="..\EndavaTechCourse.BankApp.Infrastructure\EndavaTechCourse.BankApp.Infrastructure.csproj" />
+    <ProjectReference Include="..\EndavaTechCourse.BankApp.Application\EndavaTechCourse.BankApp.Application.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
 

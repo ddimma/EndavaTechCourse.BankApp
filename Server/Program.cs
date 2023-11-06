@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using EndavaTechCourse.BankApp.Infrastructure;
 using EndavaTechCourse.BankApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using EndavaTechCourse.BankApp.Application.Queries.GetWallets;
 
 namespace EndavaTechCourse.BankApp;
 
@@ -14,6 +15,13 @@ public class Program
         var configuration = builder.Configuration;
 
         // Add services to the container.
+
+        // Add mediatoR
+        builder.Services.AddMediatR(config => {
+            config.RegisterServicesFromAssemblies(typeof(Program).Assembly);
+            config.RegisterServicesFromAssemblies(typeof(GetWalletsQuery).Assembly);
+        });
+
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
 

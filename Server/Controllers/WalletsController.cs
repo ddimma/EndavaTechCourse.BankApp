@@ -4,6 +4,8 @@ using EndavaTechCourse.BankApp.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using EndavaTechCourse.BankApp.Shared;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
+using EndavaTechCourse.BankApp.Application.Queries.GetWallets;
 
 namespace EndavaTechCourse.BankApp.Server.Controllers
 {
@@ -12,10 +14,13 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
     public class WalletsController : ControllerBase
 	{
         private readonly ApplicationDbContext _dbContext;
-        public WalletsController(ApplicationDbContext dbContext)
+        public readonly IMediator mediator;
+        public WalletsController(ApplicationDbContext dbContext, IMediator mediator)
         {
             ArgumentNullException.ThrowIfNull(dbContext);
+            ArgumentNullException.ThrowIfNull(mediator);
             _dbContext = dbContext;
+            this.mediator = mediator;
         }
 
         [HttpPost("create")]
@@ -60,9 +65,7 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
         [HttpGet]
         public async Task<List<WalletDto>> GetWallets()
         {
-            var wallets = await _dbContext.Wallets
-                .Include(x => x.Currency).ToListAsync();
-
+            var wallets = await mediator.Send(new GetWalletsQuery());
             var walletsList = new List<WalletDto>();
             foreach (var wallet in wallets)
             {

@@ -1,12 +1,21 @@
 ﻿@inherits LayoutComponentBase
-@using EndavaTechCourse.BankApp.Client.Pages 
 
-<MudThemeProvider />
+<MudThemeProvider Theme="Theme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    <NavBar/>
+    <MudAppBar Elevation="0" Color="Color.Primary">
+        <h2>Endava University Bank App | </h2>
+        <MudButton Href="/" Variant="Variant.Text" Style=@($"color:{Theme.PaletteDark.White}") Class="ml-4">Pagina Principala</MudButton>
+        <MudButton Href="/user-panel" Variant="Variant.Text" Style=@($"color:{Theme.PaletteDark.White}") Class="ml-4">Panou utilizator</MudButton>
+        <MudButton Href="/admin-panel" Variant="Variant.Text" Style=@($"color:{Theme.PaletteDark.White}") Class="ml-4">Panou administrator</MudButton>
+
+        <MudSpacer />
+        <MudButton Href="/login" Variant="Variant.Filled" DisableElevation="true" Color="Color.Tertiary" Class="mr-4">Autentificare</MudButton>
+        <MudButton Href="/register" Variant="Variant.Filled" DisableElevation="true" Color="Color.Secondary" Class="mr-4">Inregistrare</MudButton>
+    </MudAppBar>
+
     <MudMainContent>
         <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-8">
             @Body
@@ -20,10 +29,10 @@
 
 @code {
     private MudTheme Theme = new MudTheme()
-    {
-        Palette = new PaletteLight()
         {
-            Tertiary = Colors.DeepPurple.Darken4
-        },
-    };
+            Palette = new PaletteLight()
+            {
+                Tertiary = Colors.DeepPurple.Darken4
+            },
+        };
 }

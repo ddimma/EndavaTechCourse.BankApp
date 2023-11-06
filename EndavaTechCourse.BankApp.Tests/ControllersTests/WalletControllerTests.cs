@@ -66,10 +66,6 @@ namespace EndavaTechCourse.BankApp.Tests.ControllersTests
             WalletDto walletDto,
             Wallet wallet)
         {
-            var walletDto = new WalletDto
-            {
-
-            };
 
             dbContext.Wallets.Add(wallet);
             dbContext.SaveChanges();

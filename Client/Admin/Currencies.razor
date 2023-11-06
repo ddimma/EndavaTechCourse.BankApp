@@ -1,0 +1,138 @@
+﻿@page "/currencies"
+@layout AdminLayout
+@inject HttpClient httpClient
+
+<MudGrid>
+    <MudItem md="7">
+        @if (currencies is null || !currencies.Any())
+        {
+            <MudAlert Class="pa-4 mt-6" Severity="Severity.Error">Nu exista valute la moment.</MudAlert>
+        }
+        else
+        {
+            <MudTable Elevation="3" Class="pa-4 mt-6" Items="@currencies" Height="400px">
+                <HeaderContent>
+                    <MudTh>Denumirea</MudTh>
+                    <MudTh>Codul</MudTh>
+                    <MudTh>Rata de schimb</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <ColGroup>
+                    <col style="width: 50%;" />
+                    <col />
+                    <col />
+                    <col />
+                </ColGroup>
+                <RowTemplate>
+                    <MudTd DataLabel="Nr">@context.Name</MudTd>
+                    <MudTd DataLabel="Nr">@context.CurrencyCode</MudTd>
+                    <MudTd DataLabel="Nr">@context.ChangeRate</MudTd>
+
+                    <MudTd DataLabel="Nr">
+                        @if (context.CanBeRemoved)
+                        {
+                            <MudButton Color="Color.Error" OnClick="@((e) => DeleteCurrency(context.Id))">Sterge</MudButton>
+                        }
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+            <MudItem md="12">
+                @if (newCurrencyError != string.Empty)
+                {
+                    <MudAlert>@newCurrencyError</MudAlert>
+                }
+            </MudItem>
+        }
+    </MudItem>
+
+    <MudItem md="4">
+        <MudGrid>
+            <MudItem md="12" Class="mt-4">
+                <MudText>Valuta noua : </MudText>
+            </MudItem>
+
+            <MudItem md="12">
+                <MudPaper Elevation="3" Class="pa-2">
+                    <MudTextField T="string" @bind-Value="newCurrency.Name" Label="Denumirea valutei" />
+                </MudPaper>
+            </MudItem>
+            <MudItem md="4">
+                <MudPaper Elevation="3" Class="pa-2">
+                    <MudTextField T="string" @bind-Value="newCurrency.CurrencyCode" Label="Codul Valutei" />
+                </MudPaper>
+            </MudItem>
+            <MudItem md="5">
+                <MudPaper Elevation="3" Class="pa-2">
+                    <MudTextField T="decimal" @bind-Value="newCurrency.ChangeRate" Label="Rata de schimb" />
+                </MudPaper>
+            </MudItem>
+            <MudItem md="3">
+                <MudButton Class="mt-4" Variant="Variant.Filled" Color="Color.Primary" OnClick="AddCurrency">Adauga</MudButton>
+            </MudItem>
+            <MudItem md="12">
+                @if (newCurrencyError != string.Empty)
+                {
+                    <MudAlert>@newCurrencyError</MudAlert>
+                }
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private IEnumerable<CurrencyDto> currencies;
+    private CurrencyDto newCurrency = new();
+    private string newCurrencyError = string.Empty;
+    private string deleteCurrencyError = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCurrencies();
+        StateHasChanged();
+
+        await base.OnInitializedAsync();
+    }
+
+    public async Task GetCurrencies() => currencies = await this.httpClient.GetFromJsonAsync<List<CurrencyDto>>("api/currencies");
+
+
+    public async Task AddCurrency()
+    {
+        if (string.IsNullOrEmpty(newCurrency.Name))
+            newCurrencyError = "Numele valutei nu poate fi gol";
+        else if (string.IsNullOrEmpty(newCurrency.CurrencyCode))
+            newCurrencyError = "Codul valutei nu poate fi gol";
+        else if (newCurrency.ChangeRate <= 0)
+            newCurrencyError = "Rata de schimb nu poate fi 0 sau mai mica";
+        else
+        {
+            var result = await this.httpClient.PostAsJsonAsync("api/currencies", newCurrency);
+
+            if (!result.IsSuccessStatusCode)
+                newCurrencyError = await result.Content.ReadAsStringAsync();
+            else
+            {
+                await GetCurrencies();
+                newCurrencyError = string.Empty;
+                newCurrency = new();
+            }
+        }
+
+        StateHasChanged();
+    }
+
+    public async Task DeleteCurrency(string id)
+    {
+        var result = await this.httpClient.PostAsJsonAsync("api/currencies/delete", id);
+
+        if (result.IsSuccessStatusCode)
+        {
+            await GetCurrencies();
+            deleteCurrencyError = string.Empty;
+        }
+        else
+            deleteCurrencyError = await result.Content.ReadAsStringAsync();
+
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.1.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Commands\" />
+    <None Remove="Queries\" />
+    <None Remove="Queries\GetWallets\" />
+    <None Remove="Commands\AddCurrency\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Commands\" />
+    <Folder Include="Queries\" />
+    <Folder Include="Queries\GetWallets\" />
+    <Folder Include="Commands\AddCurrency\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EndavaTechCourse.BankApp.Domain\EndavaTechCourse.BankApp.Domain.csproj" />
+    <ProjectReference Include="..\EndavaTechCourse.BankApp.Infrastructure\EndavaTechCourse.BankApp.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
