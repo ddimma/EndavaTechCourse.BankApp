@@ -1,0 +1,32 @@
+﻿@page "/register"
+@layout EmptyLayout
+
+<PageTitle>Endava .NET Tech Course</PageTitle>
+
+<MudGrid Class="justify-md-center">
+    <MudItem sm="4">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h5">Inregistrare</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent Class="justify-md-center ">
+                <MudTextField T="string" Label="Nume" />
+                <MudTextField T="string" Label="Prenume" />
+                <MudTextField T="string" Label="Email" />
+                <MudTextField T="string" Label="Parola" InputType="InputType.Password" />
+            </MudCardContent>
+        </MudCard>
+        <MudPaper Class="pa-4 mt-4">
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" Class="mx-2">Ok</MudButton>
+            <MudButton Href="/login" Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true">Autentificare</MudButton>
+            <MudButton Href="/" Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true" Class="mx-2">Acasa</MudButton>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+
+@code {
+
+}
