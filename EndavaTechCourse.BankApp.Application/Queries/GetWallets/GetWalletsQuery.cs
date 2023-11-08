@@ -8,7 +8,5 @@ namespace EndavaTechCourse.BankApp.Application.Queries.GetWallets
 	{
 		
 	}
-
-
 }
 
