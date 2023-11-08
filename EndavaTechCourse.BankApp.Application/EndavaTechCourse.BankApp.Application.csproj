@@ -13,12 +13,24 @@
     <None Remove="Queries\" />
     <None Remove="Queries\GetWallets\" />
     <None Remove="Commands\AddCurrency\" />
+    <None Remove="Queries\GetCurrencies\" />
+    <None Remove="Queries\GetCurrencyById\" />
+    <None Remove="Commands\DeteleCurrency\" />
+    <None Remove="Queries\GetWalletById\" />
+    <None Remove="Commands\DeleteWallet\" />
+    <None Remove="Commands\AddWallet\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\" />
     <Folder Include="Queries\" />
     <Folder Include="Queries\GetWallets\" />
     <Folder Include="Commands\AddCurrency\" />
+    <Folder Include="Queries\GetCurrencies\" />
+    <Folder Include="Queries\GetCurrencyById\" />
+    <Folder Include="Commands\DeteleCurrency\" />
+    <Folder Include="Queries\GetWalletById\" />
+    <Folder Include="Commands\DeleteWallet\" />
+    <Folder Include="Commands\AddWallet\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EndavaTechCourse.BankApp.Domain\EndavaTechCourse.BankApp.Domain.csproj" />

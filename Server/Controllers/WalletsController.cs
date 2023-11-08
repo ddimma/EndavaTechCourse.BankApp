@@ -6,6 +6,9 @@ using EndavaTechCourse.BankApp.Shared;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 using EndavaTechCourse.BankApp.Application.Queries.GetWallets;
+using EndavaTechCourse.BankApp.Application.Queries.GetWalletById;
+using EndavaTechCourse.BankApp.Application.Commands.DeteleCurrency;
+using EndavaTechCourse.BankApp.Application.Commands.DeleteWallet;
 
 namespace EndavaTechCourse.BankApp.Server.Controllers
 {
@@ -24,7 +27,7 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
         }
 
         [HttpPost("create")]
-        public IActionResult CreateWallet([FromBody] WalletDto createWalletDTO)
+        public IActionResult AddWallet([FromBody] WalletDto createWalletDTO)
         {
             var wallet = new Wallet
             {
@@ -48,18 +51,26 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
         }
 
         [HttpGet("{walletId}")]
-        public IActionResult GetWallet(Guid walletId)
+        public async Task<WalletDto> GetWalletById(string walletId)
         {
-            var wallet = _dbContext.Wallets
-            .Include(w => w.Currency) 
-            .FirstOrDefault(w => w.Id == walletId);
+            var wallet = await mediator.Send(new GetWalletByIdQuery
+            {
+                Id = walletId
+            });
 
             if (wallet == null)
             {
-                return NotFound("Wallet not found.");
+                return new WalletDto();
             }
 
-            return Ok(wallet);
+            var walletDto = new WalletDto()
+            {
+                Amount = wallet.Amount,
+                Id = wallet.Id.ToString(),
+                Currency = wallet.Currency.CurrencyCode,
+                Type = wallet.Type
+            };
+            return walletDto;
         }
 
         [HttpGet]
@@ -79,6 +90,16 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
                 walletsList.Add(newWallet);
             }
             return walletsList;
+        }
+
+        [HttpPost("{walletId}")]
+        public async Task<IActionResult> DeleteCurrency(string walletId)
+        {
+            var walletToDelete = await mediator.Send(new DeleteWalletCommand
+            {
+                Id = walletId
+            });
+            return walletToDelete.IsSuccessful ? Ok() : BadRequest(walletToDelete.Error);
         }
     }
 }

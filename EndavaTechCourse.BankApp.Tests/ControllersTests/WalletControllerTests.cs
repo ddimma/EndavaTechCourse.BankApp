@@ -5,15 +5,6 @@ using EndavaTechCourse.BankApp.Server.Controllers;
 using EndavaTechCourse.BankApp.Domain.Models;
 using FluentAssertions;
 using AutoFixture.Idioms;
-using AutoFixture.AutoMoq;
-using NSubstitute;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Moq;
-using System;
-
 
 namespace EndavaTechCourse.BankApp.Tests.ControllersTests
 {
@@ -54,7 +45,7 @@ namespace EndavaTechCourse.BankApp.Tests.ControllersTests
             dbContext.SaveChanges();
             dbContext.ChangeTracker.Clear();
 
-            var result = controller.CreateWallet(walletDto);
+            var result = controller.AddWallet(walletDto);
 
             Assert.IsNotNull(result);
         }
@@ -71,7 +62,7 @@ namespace EndavaTechCourse.BankApp.Tests.ControllersTests
             dbContext.SaveChanges();
             dbContext.ChangeTracker.Clear();
 
-            var result = controller.CreateWallet(walletDto);
+            var result = controller.AddWallet(walletDto);
 
             Assert.IsNull(result);
         }
