@@ -1,5 +1,4 @@
-﻿using System;
-namespace EndavaTechCourse.BankApp.Domain.Common
+﻿namespace EndavaTechCourse.BankApp.Domain.Common
 {
 	public class BaseEntity
 	{

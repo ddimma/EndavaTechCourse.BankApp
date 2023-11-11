@@ -1,5 +1,4 @@
-﻿using System;
-using EndavaTechCourse.BankApp.Application.Commands.AddCurrency;
+﻿using EndavaTechCourse.BankApp.Application.Commands.AddCurrency;
 using EndavaTechCourse.BankApp.Application.Commands.DeteleCurrency;
 using EndavaTechCourse.BankApp.Application.Queries.GetCurrencies;
 using EndavaTechCourse.BankApp.Application.Queries.GetCurrencyById;

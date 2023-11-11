@@ -162,6 +162,20 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("4cee07cf-4765-4624-a85f-e154c452ae07"),
+                            Name = "User",
+                            NormalizedName = "User"
+                        },
+                        new
+                        {
+                            Id = new Guid("a3187ec8-5c7b-4507-b15d-c53ef068bead"),
+                            Name = "Admin",
+                            NormalizedName = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

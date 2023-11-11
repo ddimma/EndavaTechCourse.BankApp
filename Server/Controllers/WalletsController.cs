@@ -1,5 +1,4 @@
-﻿using System;
-using EndavaTechCourse.BankApp.Domain.Models;
+﻿using EndavaTechCourse.BankApp.Domain.Models;
 using EndavaTechCourse.BankApp.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using EndavaTechCourse.BankApp.Shared;

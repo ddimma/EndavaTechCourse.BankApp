@@ -1,6 +1,4 @@
-﻿using System;
-using EndavaTechCourse.BankApp.Application.Queries.GetWallets;
-using EndavaTechCourse.BankApp.Domain.Models;
+﻿using EndavaTechCourse.BankApp.Domain.Models;
 using EndavaTechCourse.BankApp.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
