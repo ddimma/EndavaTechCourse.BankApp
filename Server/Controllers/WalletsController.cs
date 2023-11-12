@@ -8,6 +8,7 @@ using EndavaTechCourse.BankApp.Application.Queries.GetWallets;
 using EndavaTechCourse.BankApp.Application.Queries.GetWalletById;
 using EndavaTechCourse.BankApp.Application.Commands.DeteleCurrency;
 using EndavaTechCourse.BankApp.Application.Commands.DeleteWallet;
+using EndavaTechCourse.BankApp.Application.Commands.AddWallet;
 
 namespace EndavaTechCourse.BankApp.Server.Controllers
 {
@@ -25,31 +26,28 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
             this.mediator = mediator;
         }
 
-        [HttpPost("create")]
-        public IActionResult AddWallet([FromBody] WalletDto createWalletDTO)
+        [HttpPost("add")]
+        public async Task <IActionResult> AddWallet([FromBody] WalletDto createWalletDTO)
         {
-            var wallet = new Wallet
+            var command = new AddWalletCommand()
             {
                 Type = createWalletDTO.Type,
                 Amount = createWalletDTO.Amount,
-                Currency = new Currency
-                {
-                    CurrencyCode = createWalletDTO.Currency
-                }
+                Currency = createWalletDTO.Currency
             };
-
-            if (wallet == null)
+            
+            if (command == null)
             {
                 return BadRequest();
             }
 
-            _dbContext.Wallets.Add(wallet);
-            _dbContext.SaveChanges();
+            var result = await mediator.Send(command);
 
-            return Ok();
+            return result.IsSuccessful ? Ok() : BadRequest(result.Error);
         }
 
         [HttpGet("{walletId}")]
+        [Route("getById")]
         public async Task<WalletDto> GetWalletById(string walletId)
         {
             var wallet = await mediator.Send(new GetWalletByIdQuery
@@ -92,7 +90,8 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
         }
 
         [HttpPost("{walletId}")]
-        public async Task<IActionResult> DeleteCurrency(string walletId)
+        [Route("delete")]
+        public async Task<IActionResult> DeleteWallet(string walletId)
         {
             var walletToDelete = await mediator.Send(new DeleteWalletCommand
             {

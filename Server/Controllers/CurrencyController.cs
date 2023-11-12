@@ -1,5 +1,6 @@
 ﻿using EndavaTechCourse.BankApp.Application.Commands.AddCurrency;
 using EndavaTechCourse.BankApp.Application.Commands.DeteleCurrency;
+using EndavaTechCourse.BankApp.Application.Commands.UpdateCurrency;
 using EndavaTechCourse.BankApp.Application.Queries.GetCurrencies;
 using EndavaTechCourse.BankApp.Application.Queries.GetCurrencyById;
 using EndavaTechCourse.BankApp.Client.Pages;
@@ -22,6 +23,7 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
 		}
 
 		[HttpPost]
+		[Route("add")]
 		public async Task<IActionResult> AddCurrency([FromBody] CurrencyDto dto)
 		{
 			var command = new AddCurrencyCommand()
@@ -57,6 +59,7 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
 		}
 
 		[HttpGet("{currencyId}")]
+		[Route("getById")]
 		public async Task<CurrencyDto> GetCurrencyById(string currencyId)
 		{
 			var currency = await mediator.Send(new GetCurrencyByIdQuery
@@ -82,12 +85,29 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
 		}
 
 		[HttpPost("{currencyId}")]
+		[Route("update")]
+		public async Task<IActionResult> UpdateCurrency([FromBody] CurrencyDto currencyDto)
+		{
+			var currencyToUpdate = await mediator.Send(new UpdateCurrencyCommand
+			{
+				Id = currencyDto.Id,
+				CurrencyCode = currencyDto.CurrencyCode,
+				ChangeRate = currencyDto.ChangeRate,
+				Name = currencyDto.Name
+			});
+
+			return currencyToUpdate.IsSuccessful ? Ok() : BadRequest(currencyToUpdate.Error);
+		}
+
+		[HttpPost("{currencyId}")]
+		[Route("delete")]
 		public async Task<IActionResult> DeleteCurrency(string currencyId)
 		{
 			var currencyToDelete = await mediator.Send(new DeleteCurrencyCommand
 			{
 				Id = currencyId
 			});
+
             return currencyToDelete.IsSuccessful ? Ok() : BadRequest(currencyToDelete.Error);
         }
 	}

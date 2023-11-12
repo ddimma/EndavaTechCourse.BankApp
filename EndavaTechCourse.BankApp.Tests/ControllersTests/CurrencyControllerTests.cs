@@ -1,20 +1,12 @@
-﻿using EndavaTechCourse.BankApp.Infrastructure.Persistence;
-using EndavaTechCourse.BankApp.Shared;
+﻿using EndavaTechCourse.BankApp.Shared;
 using EndavaTechCourse.BankApp.Tests.Common;
 using EndavaTechCourse.BankApp.Server.Controllers;
 using EndavaTechCourse.BankApp.Domain.Models;
-using FluentAssertions;
-using AutoFixture.Idioms;
 using MediatR;
 using NSubstitute;
-using EndavaTechCourse.BankApp.Application.Commands.AddWallet;
 using EndavaTechCourse.BankApp.Application.Commands;
 using EndavaTechCourse.BankApp.Application.Commands.AddCurrency;
 using EndavaTechCourse.BankApp.Application.Queries.GetCurrencies;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Microsoft.VisualBasic;
-using NSubstitute.Core;
 using NUnit.Framework.Internal;
 using EndavaTechCourse.BankApp.Application.Queries.GetCurrencyById;
 using EndavaTechCourse.BankApp.Application.Commands.DeteleCurrency;
@@ -24,14 +16,6 @@ namespace EndavaTechCourse.BankApp.Tests.ControllersTests
     [TestFixture]
 	public class CurrencyControllerTests
 	{
-        private readonly Mock<IMediator> _mediator;
-        private readonly CurrencyController _controller;
-        public CurrencyControllerTests()
-        {
-            _mediator = new Mock<IMediator>();
-            _controller = new CurrencyController(_mediator.Object);
-
-        }
         [Test, ApplicationData]
         public async Task ShouldSendAddCurrencyCommand(
             [Frozen] IMediator mediator,
@@ -93,7 +77,7 @@ namespace EndavaTechCourse.BankApp.Tests.ControllersTests
             [Frozen] IMediator mediator,
             [Greedy] CurrencyController controller)
         {
-            var currencyId = Guid.NewGuid(); // Generate a new GUID for testing purposes
+            var currencyId = Guid.NewGuid();
 
             mediator.Send(Arg.Any<DeleteCurrencyCommand>(), default).Returns(new CommandsStatus());
 

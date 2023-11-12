@@ -3,32 +3,40 @@ using EndavaTechCourse.BankApp.Shared;
 using EndavaTechCourse.BankApp.Tests.Common;
 using EndavaTechCourse.BankApp.Server.Controllers;
 using EndavaTechCourse.BankApp.Domain.Models;
-using FluentAssertions;
 using AutoFixture.Idioms;
+using MediatR;
+using NSubstitute;
+using EndavaTechCourse.BankApp.Application.Commands;
+using EndavaTechCourse.BankApp.Application.Queries.GetWallets;
+using EndavaTechCourse.BankApp.Application.Commands.AddWallet;
+using EndavaTechCourse.BankApp.Application.Queries.GetWalletById;
+using EndavaTechCourse.BankApp.Application.Commands.DeleteWallet;
 
 namespace EndavaTechCourse.BankApp.Tests.ControllersTests
 {
 	public class WalletControllerTests
 	{
         [Test, ApplicationData]
-		public async Task ShouldGetWallets(
-			[Frozen] ApplicationDbContext context,
+		public async Task ShouldSendGetWalletsQuery(
+			[Frozen] IMediator mediator,
 			[Greedy] WalletsController controller,
-			Wallet firstWallet,
-			Wallet secondWallet)
+            Wallet firstWallet,
+            Wallet secondWallet)
 		{
-			context.Wallets.AddRange(firstWallet, secondWallet);
-			context.SaveChanges();
-			context.ChangeTracker.Clear();
+            var wallets = new List<Wallet>();
+            wallets.Append(firstWallet);
+            wallets.Append(secondWallet);
 
-			var result = controller.GetWallets();
+            mediator.Send(Arg.Any<GetWalletsQuery>(), default).Returns(wallets);
 
-            //Assert
-            result.Should().NotBeNull();
-            var walletList = await result;
-            walletList.Should().HaveCount(2);
+            var result = await controller.GetWallets();
 
-		}
+            await mediator.Received(1).Send(Arg.Any<GetWalletsQuery>(), default);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<List<WalletDto>>(result);
+            Assert.AreEqual(wallets.Count, result.Count);
+        }
 
 		[Test, ApplicationData]
         public void CanCreateInstance(GuardClauseAssertion assertion)
@@ -51,20 +59,45 @@ namespace EndavaTechCourse.BankApp.Tests.ControllersTests
         }
 
         [Test, ApplicationData]
-        public void CreateWallet_ValidData_ReturnsBadRequest(
-            [Frozen] ApplicationDbContext dbContext,
+        public async Task ShouldSendAddWalletsCommand(
+            [Frozen] IMediator mediator,
             [Greedy] WalletsController controller,
-            WalletDto walletDto,
+            WalletDto walletDto)
+        {
+            mediator.Send(Arg.Any<AddWalletCommand>(), default).Returns(new CommandsStatus());
+
+            await controller.AddWallet(walletDto);
+
+            await mediator.Received(1).Send(Arg.Any<AddWalletCommand>(), default);
+        }
+
+        [Test, ApplicationData]
+        public async Task ShouldSendGetWalletByIdQuery(
+            [Frozen] IMediator mediator,
+            [Greedy] WalletsController controller,
             Wallet wallet)
         {
+            mediator.Send(Arg.Any<GetWalletByIdQuery>(), default).Returns(wallet);
 
-            dbContext.Wallets.Add(wallet);
-            dbContext.SaveChanges();
-            dbContext.ChangeTracker.Clear();
+            var result = await controller.GetWalletById(wallet.Id.ToString());
 
-            var result = controller.AddWallet(walletDto);
+            await mediator.Received(1).Send(Arg.Any<GetWalletByIdQuery>(), default);
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<WalletDto>(result);
+        }
 
-            Assert.IsNull(result);
+        [Test, ApplicationData]
+        public async Task ShouldSendDeleteWalletCommand(
+            [Frozen] IMediator mediator,
+            [Greedy] WalletsController controller)
+        {
+            var walletId = Guid.NewGuid();
+            mediator.Send(Arg.Any<DeleteWalletCommand>(), default).Returns(new CommandsStatus());
+
+            var result = await controller.DeleteWallet(walletId.ToString());
+
+            await mediator.Received(1).Send(Arg.Is<DeleteWalletCommand>(cmd => cmd.Id == walletId.ToString()), default);
+            Assert.IsNotNull(result);
         }
     }
 }

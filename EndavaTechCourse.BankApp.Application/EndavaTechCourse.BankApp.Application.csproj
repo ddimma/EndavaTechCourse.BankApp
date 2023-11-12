@@ -20,6 +20,8 @@
     <None Remove="Commands\DeleteWallet\" />
     <None Remove="Commands\AddWallet\" />
     <None Remove="Commands\RegisterUser\" />
+    <None Remove="Commands\UpdateCurrency\" />
+    <None Remove="Commands\UpdateWallet\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\" />
@@ -33,6 +35,8 @@
     <Folder Include="Commands\DeleteWallet\" />
     <Folder Include="Commands\AddWallet\" />
     <Folder Include="Commands\RegisterUser\" />
+    <Folder Include="Commands\UpdateCurrency\" />
+    <Folder Include="Commands\UpdateWallet\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EndavaTechCourse.BankApp.Domain\EndavaTechCourse.BankApp.Domain.csproj" />

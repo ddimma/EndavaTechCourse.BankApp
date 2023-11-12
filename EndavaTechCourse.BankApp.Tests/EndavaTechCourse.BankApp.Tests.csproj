@@ -35,10 +35,18 @@
   <ItemGroup>
     <None Remove="Common\" />
     <None Remove="ControllersTests\" />
+    <None Remove="CommandsTests\" />
+    <None Remove="QueriesTests\" />
+    <None Remove="CommandsTests\CurrencyCommandsTests\" />
+    <None Remove="CommandsTests\WalletCommandsTests\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\" />
     <Folder Include="ControllersTests\" />
+    <Folder Include="CommandsTests\" />
+    <Folder Include="QueriesTests\" />
+    <Folder Include="CommandsTests\CurrencyCommandsTests\" />
+    <Folder Include="CommandsTests\WalletCommandsTests\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EndavaTechCourse.BankApp.Infrastructure\EndavaTechCourse.BankApp.Infrastructure.csproj" />
