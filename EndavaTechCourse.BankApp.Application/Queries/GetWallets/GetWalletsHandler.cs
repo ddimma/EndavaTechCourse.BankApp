@@ -10,7 +10,7 @@ namespace EndavaTechCourse.BankApp.Application.Queries.GetWallets
         private readonly ApplicationDbContext context;
         
 
-        public GetWalletsHandler(ApplicationDbContext context, IMediator mediator)
+        public GetWalletsHandler(ApplicationDbContext context)
         {
             ArgumentNullException.ThrowIfNull(context);
             this.context = context;

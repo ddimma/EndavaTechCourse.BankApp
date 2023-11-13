@@ -1,14 +1,12 @@
-﻿using EndavaTechCourse.BankApp.Domain.Models;
-using EndavaTechCourse.BankApp.Infrastructure.Persistence;
+﻿using EndavaTechCourse.BankApp.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using EndavaTechCourse.BankApp.Shared;
-using Microsoft.EntityFrameworkCore;
 using MediatR;
 using EndavaTechCourse.BankApp.Application.Queries.GetWallets;
 using EndavaTechCourse.BankApp.Application.Queries.GetWalletById;
-using EndavaTechCourse.BankApp.Application.Commands.DeteleCurrency;
 using EndavaTechCourse.BankApp.Application.Commands.DeleteWallet;
 using EndavaTechCourse.BankApp.Application.Commands.AddWallet;
+using EndavaTechCourse.BankApp.Application.Commands.UpdateWallet;
 
 namespace EndavaTechCourse.BankApp.Server.Controllers
 {
@@ -26,7 +24,7 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
             this.mediator = mediator;
         }
 
-        [HttpPost("add")]
+        [HttpPost("create")]
         public async Task <IActionResult> AddWallet([FromBody] WalletDto createWalletDTO)
         {
             var command = new AddWalletCommand()
@@ -87,6 +85,21 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
                 walletsList.Add(newWallet);
             }
             return walletsList;
+        }
+
+        [HttpPost("{walletId}")]
+        [Route("update")]
+        public async Task<IActionResult> UpdateWallet([FromBody] WalletDto walletDto)
+        {
+            var walletToUpdate = await mediator.Send(new UpdateWalletCommand
+            {
+                Id = walletDto.Id,
+                Type = walletDto.Type,
+                Amount = walletDto.Amount,
+                Currency = walletDto.Currency
+            });
+
+            return walletToUpdate.IsSuccessful ? Ok() : BadRequest(walletToUpdate.Error);
         }
 
         [HttpPost("{walletId}")]

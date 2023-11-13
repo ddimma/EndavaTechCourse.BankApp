@@ -1,0 +1,41 @@
+﻿@page "/transactions/create"
+@inject HttpClient httpClient
+@inject NavigationManager NavigationManager
+
+<h3>New Transaction</h3>
+
+<MudForm Model="transactionDto" OnValidSubmit="CreateTransactionAsync">
+    <MudSelect Label="Source Wallet" @bind-Value="transactionDto.SourceWalletId">
+        @foreach (var wallet in wallets)
+        {
+            <MudSelectItem T="string" Value="@wallet.Id">@wallet.Id</MudSelectItem>
+        }
+    </MudSelect>
+    <MudSelect Label="Destination Wallet" @bind-Value="transactionDto.DestinationWalletId">
+        @foreach (var wallet in wallets)
+        {
+            <MudSelectItem T="string" Value="@wallet.Id">@wallet.Id</MudSelectItem>
+        }
+    </MudSelect>
+    <MudTextField Label="Amount" @bind-Value="transactionDto.TransactionAmount" />
+    <MudTextField Label="Message" @bind-Value="transactionDto.Message" />
+    <MudButton Type="ButtonType.Submit" @onclick="CreateTransactionAsync">Confirm</MudButton>
+</MudForm>
+
+@code {
+    private TransactionDto transactionDto = new();
+    private List<WalletDto> wallets;
+
+    protected override async Task OnInitializedAsync()
+    {
+        wallets = await httpClient.GetFromJsonAsync<List<WalletDto>>("/api/wallets");
+    }
+
+    private async Task CreateTransactionAsync()
+    {
+        await httpClient.PostAsJsonAsync("api/transactions/create", transactionDto);
+        // Redirect to a success page or handle the result accordingly
+        NavigationManager.NavigateTo("/transactions");
+    }
+}
+

@@ -22,6 +22,8 @@
     <None Remove="Commands\RegisterUser\" />
     <None Remove="Commands\UpdateCurrency\" />
     <None Remove="Commands\UpdateWallet\" />
+    <None Remove="Commands\Transaction\" />
+    <None Remove="Queries\GetTransactions\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\" />
@@ -37,9 +39,12 @@
     <Folder Include="Commands\RegisterUser\" />
     <Folder Include="Commands\UpdateCurrency\" />
     <Folder Include="Commands\UpdateWallet\" />
+    <Folder Include="Commands\Transaction\" />
+    <Folder Include="Queries\GetTransactions\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EndavaTechCourse.BankApp.Domain\EndavaTechCourse.BankApp.Domain.csproj" />
     <ProjectReference Include="..\EndavaTechCourse.BankApp.Infrastructure\EndavaTechCourse.BankApp.Infrastructure.csproj" />
+    <ProjectReference Include="..\Shared\EndavaTechCourse.BankApp.Shared.csproj" />
   </ItemGroup>
 </Project>

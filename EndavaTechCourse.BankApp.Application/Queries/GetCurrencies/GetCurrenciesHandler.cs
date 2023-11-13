@@ -10,7 +10,7 @@ namespace EndavaTechCourse.BankApp.Application.Queries.GetCurrencies
         private readonly ApplicationDbContext context;
 
 
-        public GetCurrenciesHandler(ApplicationDbContext context, IMediator mediator)
+        public GetCurrenciesHandler(ApplicationDbContext context)
         {
             ArgumentNullException.ThrowIfNull(context);
             this.context = context;
