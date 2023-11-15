@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.Extensions.Configuration;
-using EndavaTechCourse.BankApp.Infrastructure;
-using EndavaTechCourse.BankApp.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
+﻿using EndavaTechCourse.BankApp.Infrastructure;
 using EndavaTechCourse.BankApp.Application.Queries.GetWallets;
+using EndavaTechCourse.BankApp.Shared;
 
 namespace EndavaTechCourse.BankApp;
 
@@ -26,6 +23,7 @@ public class Program
         builder.Services.AddRazorPages();
 
         builder.Services.AddInfrastructure(configuration);
+        builder.Services.AddScoped<CurrencyConverter>();
 
         var app = builder.Build();
 

@@ -1,5 +1,4 @@
-﻿using System;
-namespace EndavaTechCourse.BankApp.Application.Commands
+﻿namespace EndavaTechCourse.BankApp.Application.Commands
 {
 	public class CommandsStatus
 	{

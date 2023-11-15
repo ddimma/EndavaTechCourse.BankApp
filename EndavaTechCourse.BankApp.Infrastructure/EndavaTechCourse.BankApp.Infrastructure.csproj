@@ -6,12 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Migrations\" />
     <None Remove="Persistence\" />
+    <None Remove="Configurations\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="Persistence\" />
+    <Folder Include="Configurations\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">

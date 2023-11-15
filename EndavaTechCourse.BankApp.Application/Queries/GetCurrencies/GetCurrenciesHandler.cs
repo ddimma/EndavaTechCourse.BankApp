@@ -1,6 +1,4 @@
-﻿using System;
-using EndavaTechCourse.BankApp.Application.Queries.GetWallets;
-using EndavaTechCourse.BankApp.Domain.Models;
+﻿using EndavaTechCourse.BankApp.Domain.Models;
 using EndavaTechCourse.BankApp.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +10,7 @@ namespace EndavaTechCourse.BankApp.Application.Queries.GetCurrencies
         private readonly ApplicationDbContext context;
 
 
-        public GetCurrenciesHandler(ApplicationDbContext context, IMediator mediator)
+        public GetCurrenciesHandler(ApplicationDbContext context)
         {
             ArgumentNullException.ThrowIfNull(context);
             this.context = context;

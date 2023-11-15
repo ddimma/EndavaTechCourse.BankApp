@@ -1,0 +1,34 @@
+﻿@page "/transactions"
+@using EndavaTechCourse.BankApp.Shared
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+
+<h3>Wallets</h3>
+
+<MudTable Items="transactions">
+    <HeaderContent>
+        <MudTh>Transaction Amount</MudTh>
+        <MudTh>Source Wallet</MudTh>
+        <MudTh>Destination Wallet</MudTh>
+        <MudTh>Message</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.TransactionAmount</MudTd>
+        <MudTd>@context.SourceWalletId</MudTd>
+        <MudTd>@context.DestinationWalletId</MudTd>
+        <MudTd>@context.Message</MudTd>
+    </RowTemplate>
+</MudTable>
+
+
+<MudFab Href="transactions/create" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Add" Label="New Transaction" Size="Size.Medium" />
+
+@code {
+    private List<TransactionDto> transactions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        transactions = await HttpClient.GetFromJsonAsync<List<TransactionDto>>("/api/transactions");
+    }
+}

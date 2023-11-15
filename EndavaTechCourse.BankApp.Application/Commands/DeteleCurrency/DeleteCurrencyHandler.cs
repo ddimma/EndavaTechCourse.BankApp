@@ -1,6 +1,4 @@
-﻿using EndavaTechCourse.BankApp.Application.Commands.AddCurrency;
-using EndavaTechCourse.BankApp.Domain.Models;
-using EndavaTechCourse.BankApp.Infrastructure.Persistence;
+﻿using EndavaTechCourse.BankApp.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

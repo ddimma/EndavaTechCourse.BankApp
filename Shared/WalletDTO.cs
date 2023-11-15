@@ -1,5 +1,4 @@
-﻿using System;
-namespace EndavaTechCourse.BankApp.Shared
+﻿namespace EndavaTechCourse.BankApp.Shared
 {
 	public class WalletDto
 	{

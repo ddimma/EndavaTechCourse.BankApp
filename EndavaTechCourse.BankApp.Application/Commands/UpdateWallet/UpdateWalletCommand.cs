@@ -1,7 +1,9 @@
-﻿using MediatR;
-namespace EndavaTechCourse.BankApp.Application.Commands.AddWallet
+﻿using System;
+using MediatR;
+
+namespace EndavaTechCourse.BankApp.Application.Commands.UpdateWallet
 {
-	public class AddWalletCommand : IRequest<CommandsStatus>
+	public class UpdateWalletCommand : IRequest<CommandsStatus>
 	{
         public string Type { get; set; }
         public decimal Amount { get; set; }

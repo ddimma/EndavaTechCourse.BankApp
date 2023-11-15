@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231106165029_AddIdentity1")]
-    partial class AddIdentity1
+    [Migration("20231113080631_AddTransactions")]
+    partial class AddTransactions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,6 +43,33 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Currencies");
+                });
+
+            modelBuilder.Entity("EndavaTechCourse.BankApp.Domain.Models.Transaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DestinationWalletId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SourceWalletId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("TransactionAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DestinationWalletId");
+
+                    b.HasIndex("SourceWalletId");
+
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("EndavaTechCourse.BankApp.Domain.Models.User", b =>
@@ -165,6 +192,20 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("dc2583d1-3377-4e3d-bb09-d7b9f85f0a9d"),
+                            Name = "User",
+                            NormalizedName = "User"
+                        },
+                        new
+                        {
+                            Id = new Guid("b31bfb60-6631-496f-bdd1-f4a5bc2fc89a"),
+                            Name = "Admin",
+                            NormalizedName = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -268,6 +309,25 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("EndavaTechCourse.BankApp.Domain.Models.Transaction", b =>
+                {
+                    b.HasOne("EndavaTechCourse.BankApp.Domain.Models.Wallet", "DestinationWallet")
+                        .WithMany()
+                        .HasForeignKey("DestinationWalletId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EndavaTechCourse.BankApp.Domain.Models.Wallet", "SourceWallet")
+                        .WithMany()
+                        .HasForeignKey("SourceWalletId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DestinationWallet");
+
+                    b.Navigation("SourceWallet");
                 });
 
             modelBuilder.Entity("EndavaTechCourse.BankApp.Domain.Models.Wallet", b =>

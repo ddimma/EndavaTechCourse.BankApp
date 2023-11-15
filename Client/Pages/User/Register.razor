@@ -1,10 +1,11 @@
 ﻿@page "/register"
 @layout EmptyLayout
+@inject HttpClient httpClient
 
 <PageTitle>Endava .NET Tech Course</PageTitle>
 
 <MudGrid Class="justify-md-center">
-    <MudItem sm="4">
+    <MudItem sm="5">
         <MudCard>
             <MudCardHeader>
                 <CardHeaderContent>
@@ -12,14 +13,15 @@
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent Class="justify-md-center ">
-                <MudTextField T="string" Label="Nume" />
-                <MudTextField T="string" Label="Prenume" />
-                <MudTextField T="string" Label="Email" />
-                <MudTextField T="string" Label="Parola" InputType="InputType.Password" />
+                <MudTextField @bind-Value ="newUser.Username" T="string" Label="Username" />
+                <MudTextField @bind-Value ="newUser.FirstName" T="string" Label="Nume" />
+                <MudTextField @bind-Value ="newUser.LastName" T="string" Label="Prenume" />
+                <MudTextField @bind-Value ="newUser.Email" T="string" Label="Email" />
+                <MudTextField @bind-Value ="newUser.Password" T="string" Label="Parola" InputType="InputType.Password" />
             </MudCardContent>
         </MudCard>
         <MudPaper Class="pa-4 mt-4">
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" Class="mx-2">Ok</MudButton>
+            <MudButton OnClick=RegisterNewUser Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" Class="mx-2">Înregistrare</MudButton>
             <MudButton Href="/login" Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true">Autentificare</MudButton>
             <MudButton Href="/" Variant="Variant.Filled" Color="Color.Primary" DisableElevation="true" Class="mx-2">Acasa</MudButton>
         </MudPaper>
@@ -28,5 +30,11 @@
 
 
 @code {
-
+    RegisterDto newUser = new();
+    public async Task RegisterNewUser()
+    {
+        await httpClient.PostAsJsonAsync("api/account/register", newUser);
+        newUser = new();
+        StateHasChanged();
+    }
 }

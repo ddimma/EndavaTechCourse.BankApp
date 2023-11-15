@@ -4,6 +4,7 @@ using EndavaTechCourse.BankApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231108163549_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,33 +43,6 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Currencies");
-                });
-
-            modelBuilder.Entity("EndavaTechCourse.BankApp.Domain.Models.Transaction", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DestinationWalletId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("SourceWalletId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("TransactionAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DestinationWalletId");
-
-                    b.HasIndex("SourceWalletId");
-
-                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("EndavaTechCourse.BankApp.Domain.Models.User", b =>
@@ -193,13 +169,13 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("dc2583d1-3377-4e3d-bb09-d7b9f85f0a9d"),
+                            Id = new Guid("4cee07cf-4765-4624-a85f-e154c452ae07"),
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = new Guid("b31bfb60-6631-496f-bdd1-f4a5bc2fc89a"),
+                            Id = new Guid("a3187ec8-5c7b-4507-b15d-c53ef068bead"),
                             Name = "Admin",
                             NormalizedName = "Admin"
                         });
@@ -306,25 +282,6 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("EndavaTechCourse.BankApp.Domain.Models.Transaction", b =>
-                {
-                    b.HasOne("EndavaTechCourse.BankApp.Domain.Models.Wallet", "DestinationWallet")
-                        .WithMany()
-                        .HasForeignKey("DestinationWalletId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EndavaTechCourse.BankApp.Domain.Models.Wallet", "SourceWallet")
-                        .WithMany()
-                        .HasForeignKey("SourceWalletId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("DestinationWallet");
-
-                    b.Navigation("SourceWallet");
                 });
 
             modelBuilder.Entity("EndavaTechCourse.BankApp.Domain.Models.Wallet", b =>

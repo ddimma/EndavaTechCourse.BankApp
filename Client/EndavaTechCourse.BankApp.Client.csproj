@@ -22,9 +22,11 @@
   <ItemGroup>
     <None Remove="Admin\" />
     <None Remove="Pages\User\" />
+    <None Remove="Pages\Transactions\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Admin\" />
     <Folder Include="Pages\User\" />
+    <Folder Include="Pages\Transactions\" />
   </ItemGroup>
 </Project>
