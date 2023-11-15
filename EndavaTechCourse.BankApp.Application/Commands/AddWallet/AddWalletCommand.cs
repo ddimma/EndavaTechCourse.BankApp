@@ -7,6 +7,7 @@ namespace EndavaTechCourse.BankApp.Application.Commands.AddWallet
         public decimal Amount { get; set; }
         public string Currency { get; set; }
         public string Id { get; set; }
+        public string UserId { get; set; }
     }
 }
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231113080631_AddTransactions")]
-    partial class AddTransactions
+    [Migration("20231115152937_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -159,9 +159,14 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CurrencyId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Wallets");
                 });
@@ -196,13 +201,13 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("dc2583d1-3377-4e3d-bb09-d7b9f85f0a9d"),
+                            Id = new Guid("fe41fdee-7077-4072-abca-5f2ba2f61fdc"),
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = new Guid("b31bfb60-6631-496f-bdd1-f4a5bc2fc89a"),
+                            Id = new Guid("637bff8a-29b5-4cfc-916a-5e2d8cfc0e9a"),
                             Name = "Admin",
                             NormalizedName = "Admin"
                         });
@@ -338,7 +343,15 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EndavaTechCourse.BankApp.Domain.Models.User", "User")
+                        .WithMany("Wallets")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Currency");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -393,6 +406,11 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("EndavaTechCourse.BankApp.Domain.Models.Currency", b =>
+                {
+                    b.Navigation("Wallets");
+                });
+
+            modelBuilder.Entity("EndavaTechCourse.BankApp.Domain.Models.User", b =>
                 {
                     b.Navigation("Wallets");
                 });

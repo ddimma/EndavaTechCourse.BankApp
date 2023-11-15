@@ -44,6 +44,11 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Persistence
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
+            modelBuilder.Entity<Wallet>()
+            .HasOne(w => w.User)
+            .WithMany(u => u.Wallets)
+            .HasForeignKey(w => w.UserId);
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new RoleConfigurations());

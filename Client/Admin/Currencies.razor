@@ -106,7 +106,7 @@
             newCurrencyError = "Rata de schimb nu poate fi 0 sau mai mica";
         else
         {
-            var result = await this.httpClient.PostAsJsonAsync("api/currencies", newCurrency);
+            var result = await this.httpClient.PostAsJsonAsync("api/currencies/add", newCurrency);
 
             if (!result.IsSuccessStatusCode)
                 newCurrencyError = await result.Content.ReadAsStringAsync();

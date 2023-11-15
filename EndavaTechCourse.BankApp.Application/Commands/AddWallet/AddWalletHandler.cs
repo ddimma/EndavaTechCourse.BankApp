@@ -16,6 +16,7 @@ namespace EndavaTechCourse.BankApp.Application.Commands.AddWallet
 
         public async Task<CommandsStatus> Handle(AddWalletCommand request, CancellationToken cancellationToken)
         {
+            Guid.TryParse(request.UserId, out Guid userId);
             var wallet = new Wallet()
             {
                 Type = request.Type,
@@ -23,7 +24,8 @@ namespace EndavaTechCourse.BankApp.Application.Commands.AddWallet
                 Currency = new Currency()
                 {
                     CurrencyCode = request.Currency
-                }
+                },
+                UserId = userId
             };
 
             await context.Wallets.AddAsync(wallet, cancellationToken);

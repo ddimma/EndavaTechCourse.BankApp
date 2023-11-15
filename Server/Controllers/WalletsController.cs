@@ -9,32 +9,38 @@ using EndavaTechCourse.BankApp.Application.Commands.AddWallet;
 using EndavaTechCourse.BankApp.Application.Commands.UpdateWallet;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using EndavaTechCourse.BankApp.Server.Common;
 
 namespace EndavaTechCourse.BankApp.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "User")]
     public class WalletsController : ControllerBase
 	{
-        private readonly ApplicationDbContext _dbContext;
         public readonly IMediator mediator;
+
         public WalletsController(ApplicationDbContext dbContext, IMediator mediator)
         {
             ArgumentNullException.ThrowIfNull(dbContext);
             ArgumentNullException.ThrowIfNull(mediator);
-            _dbContext = dbContext;
             this.mediator = mediator;
         }
 
         [HttpPost("create")]
+        //[Authorize]
         public async Task <IActionResult> AddWallet([FromBody] WalletDto createWalletDTO)
         {
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type == Constants.UserIdClaimName);
+            if (userIdClaim == null)
+                return BadRequest();
+
+            var userId = userIdClaim.Value;
             var command = new AddWalletCommand()
             {
                 Type = createWalletDTO.Type,
                 Amount = createWalletDTO.Amount,
-                Currency = createWalletDTO.Currency
+                Currency = createWalletDTO.Currency,
+                //UserId = userId
             };
             
             if (command == null)
@@ -74,6 +80,30 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
         [HttpGet]
         public async Task<List<WalletDto>> GetWallets()
         {
+            var wallets = await mediator.Send(new GetWalletsQuery());
+            var walletsList = new List<WalletDto>();
+            foreach (var wallet in wallets)
+            {
+                var newWallet = new WalletDto
+                {
+                    Amount = wallet.Amount,
+                    Type = wallet.Type,
+                    Id = wallet.Id.ToString(),
+                    Currency = wallet.Currency.CurrencyCode,
+                };
+                walletsList.Add(newWallet);
+            }
+            return walletsList;
+        }
+
+        [HttpGet]
+        public async Task<List<WalletDto>> GetWalletsForUser()
+        {
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type == Constants.UserIdClaimName);
+            if (userIdClaim == null)
+                return new List<WalletDto>();
+
+            var userId = userIdClaim.Value; 
             var wallets = await mediator.Send(new GetWalletsQuery());
             var walletsList = new List<WalletDto>();
             foreach (var wallet in wallets)
