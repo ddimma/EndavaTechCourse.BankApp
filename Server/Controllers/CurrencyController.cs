@@ -6,6 +6,7 @@ using EndavaTechCourse.BankApp.Application.Queries.GetCurrencyById;
 using EndavaTechCourse.BankApp.Client.Pages;
 using EndavaTechCourse.BankApp.Shared;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EndavaTechCourse.BankApp.Server.Controllers
@@ -24,7 +25,8 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
 
 		[HttpPost]
 		[Route("add")]
-		public async Task<IActionResult> AddCurrency([FromBody] CurrencyDto dto)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddCurrency([FromBody] CurrencyDto dto)
 		{
 			var command = new AddCurrencyCommand()
 			{
@@ -101,7 +103,8 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
 
 		[HttpPost("{currencyId}")]
 		[Route("delete")]
-		public async Task<IActionResult> DeleteCurrency(string currencyId)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteCurrency(string currencyId)
 		{
 			var currencyToDelete = await mediator.Send(new DeleteCurrencyCommand
 			{

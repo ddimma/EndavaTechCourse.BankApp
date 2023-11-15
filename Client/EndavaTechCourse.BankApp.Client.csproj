@@ -13,6 +13,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.13" PrivateAssets="all" />
     <PackageReference Include="MudBlazor" Version="6.11.0" />
+    <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="7.0.13" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,10 +25,16 @@
     <None Remove="Admin\" />
     <None Remove="Pages\User\" />
     <None Remove="Pages\Transactions\" />
+    <None Remove="Common\" />
+    <None Remove="Services\" />
+    <None Remove="User\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Admin\" />
     <Folder Include="Pages\User\" />
     <Folder Include="Pages\Transactions\" />
+    <Folder Include="Common\" />
+    <Folder Include="Services\" />
+    <Folder Include="User\" />
   </ItemGroup>
 </Project>

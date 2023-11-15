@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using EndavaTechCourse.BankApp.Client;
 using MudBlazor.Services;
+using Blazored.LocalStorage;
+using EndavaTechCourse.BankApp.Client.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace EndavaTechCourse.BankApp.Client;
 
@@ -14,6 +16,10 @@ public class Program
         builder.RootComponents.Add<HeadOutlet>("head::after");
 
         builder.Services.AddMudServices();
+        builder.Services.AddBlazoredLocalStorage();
+        builder.Services.AddScoped<AuthService>();
+        builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<AuthService>());
+        builder.Services.AddAuthorizationCore();
 
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 

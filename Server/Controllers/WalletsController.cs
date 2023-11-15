@@ -7,11 +7,14 @@ using EndavaTechCourse.BankApp.Application.Queries.GetWalletById;
 using EndavaTechCourse.BankApp.Application.Commands.DeleteWallet;
 using EndavaTechCourse.BankApp.Application.Commands.AddWallet;
 using EndavaTechCourse.BankApp.Application.Commands.UpdateWallet;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace EndavaTechCourse.BankApp.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "User")]
     public class WalletsController : ControllerBase
 	{
         private readonly ApplicationDbContext _dbContext;

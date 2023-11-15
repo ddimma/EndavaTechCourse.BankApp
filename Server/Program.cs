@@ -1,6 +1,7 @@
 ﻿using EndavaTechCourse.BankApp.Infrastructure;
 using EndavaTechCourse.BankApp.Application.Queries.GetWallets;
 using EndavaTechCourse.BankApp.Shared;
+using EndavaTechCourse.BankApp.Server.Composition;
 
 namespace EndavaTechCourse.BankApp;
 
@@ -18,7 +19,7 @@ public class Program
             config.RegisterServicesFromAssemblies(typeof(Program).Assembly);
             config.RegisterServicesFromAssemblies(typeof(GetWalletsQuery).Assembly);
         });
-
+        builder.Services.AddJwtIdentity(configuration);
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
 
