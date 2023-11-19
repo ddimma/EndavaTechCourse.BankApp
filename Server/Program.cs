@@ -2,6 +2,13 @@
 using EndavaTechCourse.BankApp.Application.Queries.GetWallets;
 using EndavaTechCourse.BankApp.Shared;
 using EndavaTechCourse.BankApp.Server.Composition;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using EndavaTechCourse.BankApp.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Identity;
+using EndavaTechCourse.BankApp.Domain.Models;
+using EndavaTechCourse.BankApp.Server.Common.JWTToken;
 
 namespace EndavaTechCourse.BankApp;
 
@@ -22,9 +29,10 @@ public class Program
         builder.Services.AddJwtIdentity(configuration);
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
-
+        builder.Services.AddSession();
         builder.Services.AddInfrastructure(configuration);
         builder.Services.AddScoped<CurrencyConverter>();
+        builder.Services.AddScoped<IJwtService, JwtService>();
 
         var app = builder.Build();
 

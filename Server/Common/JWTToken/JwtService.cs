@@ -7,7 +7,12 @@ using System.Text;
 
 namespace EndavaTechCourse.BankApp.Server.Common.JWTToken
 {
-    public class JwtService
+    public interface IJwtService
+    {
+        string GetUserIdFromToken(string authorizationHeader);
+    }
+
+    public class JwtService : IJwtService
     {
         public readonly TokenSettings tokenSettings;
 
@@ -21,10 +26,10 @@ namespace EndavaTechCourse.BankApp.Server.Common.JWTToken
         public string CreateAuthToken(string userId, string username, string[] roles)
         {
             List<Claim> claims = new()
-        {
-            new(Constants.UserIdClaimName, userId),
-            new(Constants.UsernameClaimName, username)
-        };
+            {
+                new(Constants.UserIdClaimName, userId),
+                new(Constants.UsernameClaimName, username)
+            };
 
             claims.AddRange(roles.Select(x => new Claim(ClaimTypes.Role, x)).ToList());
 
@@ -37,6 +42,28 @@ namespace EndavaTechCourse.BankApp.Server.Common.JWTToken
                 signingCredentials: signingCredentials);
 
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        }
+
+        public string GetUserIdFromToken(string authorizationHeader)
+        {
+            if (string.IsNullOrEmpty(authorizationHeader) || !authorizationHeader.StartsWith("bearer "))
+            {
+                return null;
+            }
+
+            var token = authorizationHeader.Substring("bearer ".Length);
+
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+
+            if (jsonToken == null)
+            {
+                return null;
+            }
+
+            var userIdClaim = jsonToken.Claims.FirstOrDefault(claim => claim.Type == Constants.UserIdClaimName);
+
+            return userIdClaim?.Value;
         }
     }
 }

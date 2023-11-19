@@ -26,7 +26,7 @@
 <MudFab Href="transactions/create" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Add" Label="New Transaction" Size="Size.Medium" />
 
 @code {
-    private List<TransactionDto> transactions;
+    private List<TransactionDto> transactions = new();
 
     protected override async Task OnInitializedAsync()
     {

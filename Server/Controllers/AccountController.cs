@@ -6,6 +6,9 @@ using EndavaTechCourse.BankApp.Server.Common;
 using EndavaTechCourse.BankApp.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace EndavaTechCourse.BankApp.Server.Controllers
 {
@@ -70,7 +73,14 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
                 Expires = DateTimeOffset.MaxValue
             });
 
-            return Ok(jwtToken);
+            if (Response.Headers.ContainsKey("Set-Cookie"))
+            {
+                return Ok(jwtToken);
+            }
+            else
+            {
+                return BadRequest("Failed to append cookie");
+            }
         }
 
 

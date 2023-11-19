@@ -1,7 +1,8 @@
 ﻿@page "/wallets"
 @using EndavaTechCourse.BankApp.Shared
-@inject HttpClient HttpClient
+@inject HttpClient httpClient
 @inject NavigationManager NavigationManager
+@layout UserLayout
 
 
 <h3>Wallets</h3>
@@ -30,6 +31,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        wallets = await HttpClient.GetFromJsonAsync<List<WalletDto>>("/api/wallets");
+        try
+        {
+            wallets = await httpClient.GetFromJsonAsync<List<WalletDto>>("api/wallets");
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
     }
 }

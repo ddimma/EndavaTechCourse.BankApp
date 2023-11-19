@@ -1,5 +1,4 @@
-﻿using EndavaTechCourse.BankApp.Infrastructure.Persistence;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using EndavaTechCourse.BankApp.Shared;
 using MediatR;
 using EndavaTechCourse.BankApp.Application.Queries.GetWallets;
@@ -10,6 +9,9 @@ using EndavaTechCourse.BankApp.Application.Commands.UpdateWallet;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using EndavaTechCourse.BankApp.Server.Common;
+using System.IdentityModel.Tokens.Jwt;
+using EndavaTechCourse.BankApp.Server.Common.JWTToken;
+using EndavaTechCourse.BankApp.Application.Queries.GetWalletsForUser;
 
 namespace EndavaTechCourse.BankApp.Server.Controllers
 {
@@ -18,29 +20,30 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
     public class WalletsController : ControllerBase
 	{
         public readonly IMediator mediator;
+        private readonly IJwtService jwtService;
 
-        public WalletsController(ApplicationDbContext dbContext, IMediator mediator)
+        public WalletsController(IMediator mediator, IJwtService jwtService)
         {
-            ArgumentNullException.ThrowIfNull(dbContext);
             ArgumentNullException.ThrowIfNull(mediator);
+            ArgumentNullException.ThrowIfNull(jwtService);
             this.mediator = mediator;
+            this.jwtService = jwtService;
         }
 
         [HttpPost("create")]
         //[Authorize]
         public async Task <IActionResult> AddWallet([FromBody] WalletDto createWalletDTO)
         {
-            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type == Constants.UserIdClaimName);
-            if (userIdClaim == null)
-                return BadRequest();
+            var authorizationHeader = Request.Headers["Authorization"].FirstOrDefault();
 
-            var userId = userIdClaim.Value;
+            var userId = jwtService.GetUserIdFromToken(authorizationHeader);
+
             var command = new AddWalletCommand()
             {
                 Type = createWalletDTO.Type,
                 Amount = createWalletDTO.Amount,
                 Currency = createWalletDTO.Currency,
-                //UserId = userId
+                UserId = userId
             };
             
             if (command == null)
@@ -78,33 +81,19 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
         }
 
         [HttpGet]
+        //[Authorize(Roles = "User")]
         public async Task<List<WalletDto>> GetWallets()
         {
-            var wallets = await mediator.Send(new GetWalletsQuery());
-            var walletsList = new List<WalletDto>();
-            foreach (var wallet in wallets)
+            var authorizationHeader = Request.Headers["Authorization"].FirstOrDefault();
+
+            var userId = jwtService.GetUserIdFromToken(authorizationHeader);
+
+            var query = new GetWalletsForUserQuery()
             {
-                var newWallet = new WalletDto
-                {
-                    Amount = wallet.Amount,
-                    Type = wallet.Type,
-                    Id = wallet.Id.ToString(),
-                    Currency = wallet.Currency.CurrencyCode,
-                };
-                walletsList.Add(newWallet);
-            }
-            return walletsList;
-        }
+                UserId = userId,
+            };
 
-        [HttpGet]
-        public async Task<List<WalletDto>> GetWalletsForUser()
-        {
-            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type == Constants.UserIdClaimName);
-            if (userIdClaim == null)
-                return new List<WalletDto>();
-
-            var userId = userIdClaim.Value; 
-            var wallets = await mediator.Send(new GetWalletsQuery());
+            var wallets = await mediator.Send(query);
             var walletsList = new List<WalletDto>();
             foreach (var wallet in wallets)
             {
