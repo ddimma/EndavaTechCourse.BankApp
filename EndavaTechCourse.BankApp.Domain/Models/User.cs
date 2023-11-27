@@ -6,5 +6,6 @@ namespace EndavaTechCourse.BankApp.Domain.Models
 	{
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
-	}
+        public ICollection<Wallet> Wallets { get; set; }
+    }
 }

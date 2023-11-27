@@ -8,12 +8,13 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="MediatR" Version="12.1.1" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.14" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,4 +27,14 @@
   </ItemGroup>
 
 
+  <ItemGroup>
+    <None Remove="Common\" />
+    <None Remove="Common\JWTToken\" />
+    <None Remove="Composition\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common\" />
+    <Folder Include="Common\JWTToken\" />
+    <Folder Include="Composition\" />
+  </ItemGroup>
 </Project>

@@ -23,16 +23,16 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
             this.mediator = mediator;
         }
 
-        [HttpPost]
-        [Route("create")]
-        public async Task<IActionResult> AddTransaction([FromBody] TransactionDto transactionDto)
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateTransactionToAnotherPerson([FromBody] TransactionDto transactionDto)
         {
             var command = new TransactionCommand()
             {
                 Message = transactionDto.Message,
                 SourceWalletId = transactionDto.SourceWalletId,
                 DestinationWalletId = transactionDto.DestinationWalletId,
-                TransactionAmount = transactionDto.TransactionAmount
+                TransactionAmount = transactionDto.TransactionAmount,
+                DestinationWalletCodeOrEmail = transactionDto.DestinationWalletCodeOrEmail
             };
 
             if(command == null)

@@ -17,12 +17,14 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Persistence
         public DbSet<Wallet> Wallets { get; set; }
 		public DbSet<Currency> Currencies { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Commision> Commisions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Wallet>().HasKey(x => x.Id);
             modelBuilder.Entity<Transaction>().HasKey(x => x.Id);
             modelBuilder.Entity<Currency>().HasKey(x => x.Id);
+            modelBuilder.Entity<Commision>().HasKey(x => x.Id);
 
             modelBuilder.Entity<Currency>()
                 .HasMany(e => e.Wallets)
@@ -43,6 +45,11 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Persistence
                 .HasForeignKey(t => t.DestinationWalletId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
+
+            modelBuilder.Entity<Wallet>()
+            .HasOne(w => w.User)
+            .WithMany(u => u.Wallets)
+            .HasForeignKey(w => w.UserId);
 
             base.OnModelCreating(modelBuilder);
 
