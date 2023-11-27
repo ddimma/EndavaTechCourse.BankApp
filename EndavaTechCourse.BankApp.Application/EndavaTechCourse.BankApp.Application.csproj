@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.1.1" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Commands\" />
@@ -27,6 +27,12 @@
     <None Remove="Commands\LoginUserCommand\" />
     <None Remove="Queries\GetUserDetails\" />
     <None Remove="Queries\GetWalletsForUser\" />
+    <None Remove="Queries\GetFavoriteWallets\" />
+    <None Remove="Commands\ToggleFavoriteWallet\" />
+    <None Remove="Commands\AddCommision\" />
+    <None Remove="Queries\GetCommisions\" />
+    <None Remove="Commands\UpdateCommision\" />
+    <None Remove="Commands\DeleteCommision\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\" />
@@ -47,6 +53,12 @@
     <Folder Include="Commands\LoginUserCommand\" />
     <Folder Include="Queries\GetUserDetails\" />
     <Folder Include="Queries\GetWalletsForUser\" />
+    <Folder Include="Queries\GetFavoriteWallets\" />
+    <Folder Include="Commands\ToggleFavoriteWallet\" />
+    <Folder Include="Commands\AddCommision\" />
+    <Folder Include="Queries\GetCommisions\" />
+    <Folder Include="Commands\UpdateCommision\" />
+    <Folder Include="Commands\DeleteCommision\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EndavaTechCourse.BankApp.Domain\EndavaTechCourse.BankApp.Domain.csproj" />

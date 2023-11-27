@@ -8,6 +8,8 @@ namespace EndavaTechCourse.BankApp.Application.Commands.AddWallet
         public string Currency { get; set; }
         public string Id { get; set; }
         public string UserId { get; set; }
+        public bool IsFavorite { get; set; }
+        public string WalletCode { get; set; }
     }
 }
 

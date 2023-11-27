@@ -25,7 +25,7 @@ namespace EndavaTechCourse.BankApp.Server.Controllers
 
 		[HttpPost]
 		[Route("add")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddCurrency([FromBody] CurrencyDto dto)
 		{
 			var command = new AddCurrencyCommand()

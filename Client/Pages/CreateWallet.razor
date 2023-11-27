@@ -8,8 +8,10 @@
 
 <MudForm Model="_createWallet" OnValidSubmit="CreateWalletAsync">
     <MudSelect T="string" @bind-Value="_createWallet.Type" Label="Type" AnchorOrigin="Origin.BottomCenter">
-        <MudSelectItem Value="@("Debit")" />
-        <MudSelectItem Value="@("Credit")" />
+        <MudSelectItem Value="@("Basic")" />
+        <MudSelectItem Value="@("Silver")" />
+        <MudSelectItem Value="@("Gold")" />
+        <MudSelectItem Value="@("Platinum")" />
     </MudSelect>
 
     <MudSelect T="string" @bind-Value="_createWallet.Currency" Label="CurrencyCode" AnchorOrigin="Origin.BottomCenter">

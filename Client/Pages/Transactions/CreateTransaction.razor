@@ -4,20 +4,37 @@
 @layout UserLayout
 
 <h3>New Transaction</h3>
-
+        
 <MudForm Model="transactionDto" OnValidSubmit="CreateTransactionAsync">
+    <MudSelect Label="Transaction Type" @bind-Value="transactionDto.Type">
+        <MudSelectItem T="string" Value="@("P2P")">To Another Person</MudSelectItem>
+        <MudSelectItem T="string" Value="@("Personal")">Between Personal Accounts</MudSelectItem>
+    </MudSelect>
     <MudSelect Label="Source Wallet" @bind-Value="transactionDto.SourceWalletId">
         @foreach (var wallet in wallets)
         {
-            <MudSelectItem T="string" Value="@wallet.Id">@wallet.Id</MudSelectItem>
+            <MudSelectItem T="string" Value="@wallet.Id">
+                @if (wallet.IsFavorite)
+                {
+                    <span>&#9733;</span>
+                }
+                @wallet.WalletCode
+            </MudSelectItem>
         }
     </MudSelect>
-    <MudSelect Label="Destination Wallet" @bind-Value="transactionDto.DestinationWalletId">
-        @foreach (var wallet in wallets)
-        {
-            <MudSelectItem T="string" Value="@wallet.Id">@wallet.Id</MudSelectItem>
-        }
-    </MudSelect>
+    @if (transactionDto.Type == "Personal")
+    {
+        <MudSelect Label="Destination Wallet" @bind-Value="transactionDto.DestinationWalletId">
+            @foreach (var wallet in wallets)
+            {
+                <MudSelectItem T="string" Value="@wallet.Id">@wallet.WalletCode</MudSelectItem>
+            }
+        </MudSelect>
+    }
+    @if (transactionDto.Type == "P2P")
+    {
+        <MudTextField Label="Destination Wallet Code or Email" @bind-Value="transactionDto.DestinationWalletCodeOrEmail"/>
+    }
     <MudTextField Label="Amount" @bind-Value="transactionDto.TransactionAmount" />
     <MudTextField Label="Message" @bind-Value="transactionDto.Message" />
     <MudButton Type="ButtonType.Submit" @onclick="CreateTransactionAsync">Confirm</MudButton>
@@ -30,6 +47,8 @@
     protected override async Task OnInitializedAsync()
     {
         wallets = await httpClient.GetFromJsonAsync<List<WalletDto>>("/api/wallets");
+        wallets = wallets.OrderByDescending(wallet => wallet.IsFavorite).ToList();
+        transactionDto.Type = "P2P";
     }
 
     private async Task CreateTransactionAsync()

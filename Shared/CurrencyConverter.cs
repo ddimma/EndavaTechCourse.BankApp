@@ -13,8 +13,8 @@
 
         public decimal ConvertCurrency(decimal amount, string sourceCurrencyCode, string targetCurrencyCode)
         {
-            decimal exchangeRate = exchangeRates[targetCurrencyCode] / exchangeRates[sourceCurrencyCode];
-            return amount * exchangeRate;
+            decimal amountMDL = amount * exchangeRates[sourceCurrencyCode];
+            return amountMDL / exchangeRates[targetCurrencyCode];
         }
     }
 }

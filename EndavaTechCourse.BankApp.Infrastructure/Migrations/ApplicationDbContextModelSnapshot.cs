@@ -17,10 +17,27 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.13")
+                .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("EndavaTechCourse.BankApp.Domain.Models.Commision", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("CommisionRate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("WalletType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Commisions");
+                });
 
             modelBuilder.Entity("EndavaTechCourse.BankApp.Domain.Models.Currency", b =>
                 {
@@ -153,11 +170,20 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
                     b.Property<Guid>("CurrencyId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsFavorite")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMainWallet")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("WalletCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -198,13 +224,13 @@ namespace EndavaTechCourse.BankApp.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fe41fdee-7077-4072-abca-5f2ba2f61fdc"),
+                            Id = new Guid("dd1e725c-794d-4bc6-b1e1-0fb0bea40266"),
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = new Guid("637bff8a-29b5-4cfc-916a-5e2d8cfc0e9a"),
+                            Id = new Guid("3e022886-ed29-4ec6-baeb-8b0835f9edc0"),
                             Name = "Admin",
                             NormalizedName = "Admin"
                         });

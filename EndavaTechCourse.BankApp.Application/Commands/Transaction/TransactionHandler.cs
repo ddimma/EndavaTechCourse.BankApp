@@ -21,17 +21,31 @@ namespace EndavaTechCourse.BankApp.Application.Commands.Transaction
 
         public async Task<CommandsStatus> Handle(TransactionCommand request, CancellationToken cancellationToken)
         {
+            var destinationWallet = new Wallet();
             Guid.TryParse(request.SourceWalletId, out var source);
             Guid.TryParse(request.DestinationWalletId, out var destination);
             var sourceWallet = await context.Wallets
                 .Include(w => w.Currency)
+                .Include(w => w.User)
                 .FirstOrDefaultAsync(w => w.Id == source);
-
-            var destinationWallet = await context.Wallets
+            if (request.DestinationWalletCodeOrEmail == null)
+            {
+                destinationWallet = await context.Wallets
                 .Include(w => w.Currency)
+                .Include(w => w.User)
                 .FirstOrDefaultAsync(w => w.Id == destination);
+            }
+            else
+            {
+                destinationWallet = await context.Wallets
+                .Include(w => w.Currency)
+                .Include(w => w.User)
+                .OrderByDescending(w => w.IsMainWallet)
+                .FirstOrDefaultAsync(w => w.WalletCode == request.DestinationWalletCodeOrEmail || w.User.Email == request.DestinationWalletCodeOrEmail);
+                
+            }
+            
 
-            // Input validation
             if (sourceWallet == null || destinationWallet == null) 
             {
                 return CommandsStatus.Failed("0 Wallet sursă sau destinație nu a fost găsit.");
@@ -65,7 +79,6 @@ namespace EndavaTechCourse.BankApp.Application.Commands.Transaction
             {
                 try
                 {
-                    // Save changes to the database
                     await context.Transactions.AddAsync(newTransaction, cancellationToken);
                     await context.SaveChangesAsync();
 
@@ -75,8 +88,6 @@ namespace EndavaTechCourse.BankApp.Application.Commands.Transaction
                 }
                 catch (Exception)
                 {
-                    // Optional: Log the exception
-                    // Rollback the transaction in case of an exception
                     await transaction.RollbackAsync();
                     return CommandsStatus.Failed("0 A apătut o eroare.");
                 }

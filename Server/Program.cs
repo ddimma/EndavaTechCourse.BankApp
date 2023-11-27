@@ -26,13 +26,15 @@ public class Program
             config.RegisterServicesFromAssemblies(typeof(Program).Assembly);
             config.RegisterServicesFromAssemblies(typeof(GetWalletsQuery).Assembly);
         });
+        builder.Services.AddInfrastructure(configuration);
         builder.Services.AddJwtIdentity(configuration);
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
         builder.Services.AddSession();
-        builder.Services.AddInfrastructure(configuration);
         builder.Services.AddScoped<CurrencyConverter>();
+        builder.Services.AddScoped<WalletCodeGenerator>();
         builder.Services.AddScoped<IJwtService, JwtService>();
+
 
         var app = builder.Build();
 
@@ -46,11 +48,15 @@ public class Program
             app.UseExceptionHandler("/Error");
         }
 
+        app.UseHttpsRedirection();
+
         app.UseBlazorFrameworkFiles();
         app.UseStaticFiles();
 
         app.UseRouting();
 
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.MapRazorPages();
         app.MapControllers();

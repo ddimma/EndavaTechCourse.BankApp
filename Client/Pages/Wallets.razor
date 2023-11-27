@@ -9,16 +9,29 @@
 
 <MudTable Items="wallets">
     <HeaderContent>
+        <MudTh>Favorite</MudTh>
+        <MudTh>Code</MudTh>
         <MudTh>Type</MudTh>
         <MudTh>Amount</MudTh>
         <MudTh>Currency</MudTh>
-        <MudTh>ID</MudTh>
     </HeaderContent>
     <RowTemplate>
+        <MudTd>
+            <MudButton Type="ButtonType.Submit" @onclick="() => ToggleFavorite(context)">
+                @if (context.IsFavorite)
+                {
+                    <span>&#9733;</span> <!-- Display a filled star for favorite wallets -->
+                }
+                else
+                {
+                    <span>&#9734;</span> <!-- Display an outline star for non-favorite wallets -->
+                }
+            </MudButton>
+        </MudTd>
+        <MudTd>@context.WalletCode</MudTd>
         <MudTd>@context.Type</MudTd>
         <MudTd>@context.Amount</MudTd>
         <MudTd>@context.Currency</MudTd>
-        <MudTd>@context.Id.ToString()</MudTd>
     </RowTemplate>
 </MudTable>
 
@@ -28,6 +41,7 @@
 
 @code {
     private List<WalletDto> wallets;
+    private WalletDto wallet = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -38,6 +52,30 @@
         catch (HttpRequestException ex)
         {
             Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task ToggleFavorite(WalletDto wallet)
+    {
+        try
+        {
+            var response = await httpClient.PostAsJsonAsync("api/wallets/toggle-favorite", wallet);
+
+            response.EnsureSuccessStatusCode();
+
+            if (response.IsSuccessStatusCode)
+            {
+                wallet.IsFavorite = !wallet.IsFavorite;
+                StateHasChanged();
+            }
+            else
+            {
+                Console.WriteLine("Error: Unexpected response from the API.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error toggling favorite status: {ex.Message}");
         }
     }
 }
