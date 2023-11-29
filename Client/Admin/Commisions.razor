@@ -1,0 +1,109 @@
+﻿@page "/commisions"
+@layout AdminLayout
+@inject HttpClient httpClient
+
+<MudGrid>
+    <MudItem md="7">
+        @if (commisionsList is null || !commisionsList.Any())
+        {
+            <MudAlert Class="pa-4 mt-6" Severity="Severity.Error">Nu exista comisioane la moment.</MudAlert>
+        }
+        else
+        {
+            <MudTable Elevation="3" Class="pa-4 mt-6" Items="@commisionsList" Height="400px">
+                <HeaderContent>
+                    <MudTh>Tipul wallet</MudTh>
+                    <MudTh>Comision la transfer</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <ColGroup>
+                    <col style="width: 50%;" />
+                    <col />
+                    <col />
+                    <col />
+                </ColGroup>
+                <RowTemplate>
+                    <MudTd DataLabel="Nr">@context.WalletType</MudTd>
+                    <MudTd DataLabel="Nr">@context.CommisionRate</MudTd>
+                </RowTemplate>
+            </MudTable>
+            <MudItem md="12">
+                @if (newCommisionError != string.Empty)
+                {
+                    <MudAlert>@newCommisionError</MudAlert>
+                }
+            </MudItem>
+        }
+    </MudItem>
+
+    <MudItem md="4">
+        <MudGrid>
+            <MudItem md="12" Class="mt-4">
+                <MudText>Comision nou : </MudText>
+            </MudItem>
+
+            <MudItem md="4">
+                <MudPaper Elevation="3" Class="pa-2">
+                    <MudTextField T="string" @bind-Value="newCommision.WalletType" Label="Tipul Cardului" />
+                </MudPaper>
+            </MudItem>
+            <MudItem md="5">
+                <MudPaper Elevation="3" Class="pa-2">
+                    <MudTextField T="decimal" @bind-Value="newCommision.CommisionRate" Label="Valoarea comisionului %" />
+                </MudPaper>
+            </MudItem>
+            <MudItem md="3">
+                <MudButton Class="mt-4" Variant="Variant.Filled" Color="Color.Primary" OnClick="AddCurrency">Adauga</MudButton>
+            </MudItem>
+            <MudItem md="12">
+                @if (newCommisionError != string.Empty)
+                {
+                    <MudAlert>@newCommisionError</MudAlert>
+                }
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
+
+
+@code {
+    private IEnumerable<CommisionDto> commisionsList;
+    private CommisionDto newCommision = new();
+    private string newCommisionError = string.Empty;
+    private string deleteCommisionError = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCommisions();
+        StateHasChanged();
+
+        await base.OnInitializedAsync();
+    }
+
+    public async Task GetCommisions() => commisionsList = await this.httpClient.GetFromJsonAsync<List<CommisionDto>>("api/commisions");
+
+
+    public async Task AddCurrency()
+    {
+        if (string.IsNullOrEmpty(newCommision.WalletType))
+            newCommisionError = "Tipul valutei nu poate fi gol";
+        else if (newCommision.CommisionRate <= 0)
+            newCommisionError = "Rata de schimb nu poate fi 0 sau mai mica";
+        else
+        {
+            var result = await this.httpClient.PostAsJsonAsync("api/commisions/add", newCommision);
+
+            if (!result.IsSuccessStatusCode)
+                newCommisionError = await result.Content.ReadAsStringAsync();
+            else
+            {
+                await GetCommisions();
+                newCommisionError = string.Empty;
+                newCommision = new();
+            }
+        }
+
+        StateHasChanged();
+    }
+}
+

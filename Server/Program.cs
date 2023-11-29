@@ -31,7 +31,7 @@ public class Program
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
         builder.Services.AddSession();
-        builder.Services.AddScoped<CurrencyConverter>();
+        builder.Services.AddScoped<Converter>();
         builder.Services.AddScoped<WalletCodeGenerator>();
         builder.Services.AddScoped<IJwtService, JwtService>();
 

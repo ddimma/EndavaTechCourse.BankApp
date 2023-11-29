@@ -2,7 +2,6 @@
 using EndavaTechCourse.BankApp.Shared;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using EndavaTechCourse.BankApp.Domain.Models;
 
 namespace EndavaTechCourse.BankApp.Application.Commands.Transaction
@@ -10,13 +9,13 @@ namespace EndavaTechCourse.BankApp.Application.Commands.Transaction
     public class TransactionHandler : IRequestHandler<TransactionCommand, CommandsStatus>
     {
         private readonly ApplicationDbContext context;
-        private readonly CurrencyConverter currencyConverter;
+        private readonly Converter converter;
 
-        public TransactionHandler(ApplicationDbContext context, CurrencyConverter currencyConverter)
+        public TransactionHandler(ApplicationDbContext context, Converter converter)
         {
             ArgumentNullException.ThrowIfNull(context);
             this.context = context;
-            this.currencyConverter = currencyConverter;
+            this.converter = converter;
         }
 
         public async Task<CommandsStatus> Handle(TransactionCommand request, CancellationToken cancellationToken)
@@ -54,14 +53,18 @@ namespace EndavaTechCourse.BankApp.Application.Commands.Transaction
             {
                 return CommandsStatus.Failed("0 Valoarea transferului nevalidă.");
             }
-            if (sourceWallet.Amount < request.TransactionAmount)
+            
+            decimal convertedAmount = converter.ConvertCurrency(request.TransactionAmount, sourceWallet.Currency.CurrencyCode, destinationWallet.Currency.CurrencyCode);
+            var commision = await context.Commisions.FirstOrDefaultAsync(c => c.WalletType == sourceWallet.Type);
+            var appliedCommision = request.TransactionAmount * commision.CommisionRate;
+
+            sourceWallet.Amount -= request.TransactionAmount;
+            sourceWallet.Amount -= appliedCommision;
+
+            if (sourceWallet.Amount < 0)
             {
                 return CommandsStatus.Failed("0 Resurse insuficiente.");
             }
-
-            decimal convertedAmount = currencyConverter.ConvertCurrency(request.TransactionAmount, sourceWallet.Currency.CurrencyCode, destinationWallet.Currency.CurrencyCode);
-
-            sourceWallet.Amount -= request.TransactionAmount;
 
             destinationWallet.Amount += convertedAmount;
 
